@@ -30,9 +30,12 @@ const login_post = async (req, res) => {
     const normalizedProfileImage = user.profileImage.replace(/\\/g, "/");
     res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
     console.log(token);
-    res
-      .status(200)
-      .json({ email: user.email, token, profileImage: normalizedProfileImage });
+    res.status(200).json({
+      email: user.email,
+      token,
+      profileImage: normalizedProfileImage,
+      businessName: user.business,
+    });
   } catch (error) {
     console.log(error);
     res.status(400).json({ error: error.message });
@@ -56,16 +59,6 @@ const signup_post = async (req, res) => {
       !data.passwrod ||
       !data.confirm
     ) {
-      console.log(
-        data.fname,
-        data.lname,
-        data.email,
-        data.phone,
-        data.city,
-        data.province,
-        data.passwrod,
-        data.confirm
-      );
       throw Error("Make sure all inputs are filled!");
     }
 
@@ -94,8 +87,8 @@ const signup_post = async (req, res) => {
     const user = await User.create({
       firsName: data.fname,
       lastName: data.lname,
-      business: data.bname,
-      contactNumber: data.phone,
+      business: data.phone,
+      contactNumber: data.bname,
       email: data.email,
       city: data.city,
       province: data.province,

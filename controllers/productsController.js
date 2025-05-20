@@ -117,8 +117,9 @@ const deleteProduct = async (req, res) => {
 
 const updateProduct = async (req, res) => {
   const { id } = req.params;
+  const { soldQuantity } = req.body;
 
-  console.log("Update controller is running for:", id);
+  console.log("Update controller is running for:", id, soldQuantity);
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({ error: "Invalid product ID" });
@@ -128,6 +129,28 @@ const updateProduct = async (req, res) => {
     const updatedData = {
       ...req.body,
     };
+
+    // Handle soldQuantity logic by adjusting quantity before updating
+    if (soldQuantity) {
+      const product = await productModel.findById(id);
+      if (!product) {
+        return res.status(404).json({ error: "Product not found" });
+      }
+
+      const soldQty = parseInt(soldQuantity);
+      if (isNaN(soldQty) || soldQty < 0) {
+        return res.status(400).json({ error: "Invalid soldQuantity value" });
+      }
+
+      const newQuantity = product.quantity - soldQty;
+      if (newQuantity < 0) {
+        return res
+          .status(400)
+          .json({ error: "Sold quantity exceeds available stock" });
+      }
+
+      updatedData.quantity = newQuantity; // Inject into update
+    }
 
     if (req.file) {
       updatedData.img = "\\" + req.file.path;
@@ -146,6 +169,44 @@ const updateProduct = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+// const updateProduct = async (req, res) => {
+//   const { id } = req.params;
+
+//   const { soldQuantity } = req.body;
+
+//   console.log("Update controller is running for:", id, soldQuantity);
+
+//   if(soldQuantity){
+
+//   }
+
+//   if (!mongoose.Types.ObjectId.isValid(id)) {
+//     return res.status(404).json({ error: "Invalid product ID" });
+//   }
+
+//   try {
+//     const updatedData = {
+//       ...req.body,
+//     };
+
+//     if (req.file) {
+//       updatedData.img = "\\" + req.file.path;
+//     }
+
+//     const product = await productModel.findByIdAndUpdate(id, updatedData, {
+//       new: true,
+//     });
+
+//     if (!product) {
+//       return res.status(404).json({ error: "Product not found" });
+//     }
+
+//     res.status(200).json(product);
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// };
 
 export default {
   addNewProduct,

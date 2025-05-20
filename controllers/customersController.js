@@ -58,14 +58,15 @@ const updateCustomer = async (req, res) => {
     let customer;
 
     if (req.body.totalSpent !== undefined) {
-      // Increment totalSpent only
-      customer = await customersModel.findByIdAndUpdate(
-        id,
-        { $inc: { totalSpent: Number(req.body.totalSpent) } },
-        { new: true }
-      );
+      console.log(req.body.remainVale);
+      await customersModel.findByIdAndUpdate(req.params.id, {
+        $inc: {
+          totalSpent: Number(req.body.totalSpent),
+          totalOrders: 1,
+          remainValue: Number(req.body.remainVale),
+        },
+      });
     } else {
-      // Normal update
       customer = await customersModel.findByIdAndUpdate(
         id,
         { ...req.body },

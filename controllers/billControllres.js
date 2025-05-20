@@ -34,7 +34,7 @@ const postNewData = async (req, res) => {
       totalPaied,
       customerName,
       date,
-      products, // save product array from cart
+      products,
     });
 
     res.status(201).json(data);

@@ -31,6 +31,10 @@ const customerSchema = new mongoose.Schema(
       type: Number,
       default: 0.0,
     },
+    remainValue: {
+      type: Number,
+      default: 0.0,
+    },
     lastPurchaseAt: {
       type: Date,
     },
