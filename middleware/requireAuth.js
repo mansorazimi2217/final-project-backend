@@ -1,20 +1,23 @@
 import jwt from "jsonwebtoken";
+import User from "../models/Users.js";
+const requireAuth = async (req, res, next) => {
+  const { authorization } = req.headers;
 
-export const requireAuth = (req, res, next) => {
-  const authHeader = req.headers.authorization;
-
-  if (!authHeader) {
-    return res.status(401).json({ error: "No token provided" });
+  if (!authorization) {
+    return res.status(401).json({ error: "Authorization token required" });
   }
 
-  const token = authHeader.split(" ")[1];
+  const token = authorization.split(" ")[1];
 
-  jwt.verify(token, process.env.SECRET, (err, decoded) => {
-    if (err) {
-      return res.status(401).json({ error: "Invalid token" });
-    }
+  try {
+    const { id } = jwt.verify(token, process.env.SECRET);
+    console.log(id);
+    req.user = await User.findById(id).select("_id");
 
-    req.userId = decoded.id;
     next();
-  });
+  } catch (err) {
+    return res.status(401).json({ error: "Request is not authorized" });
+  }
 };
+
+export default requireAuth;

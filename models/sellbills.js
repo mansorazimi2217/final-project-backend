@@ -2,6 +2,11 @@ import mongoose from "mongoose";
 
 const SellSchema = mongoose.Schema(
   {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "USER",
+      required: true,
+    },
     total: {
       type: Number,
       required: true,

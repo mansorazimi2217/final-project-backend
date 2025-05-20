@@ -2,7 +2,10 @@ import customersModel from "../models/customersModel.js";
 import mongoose from "mongoose";
 
 const getAllCustomers = async (req, res) => {
-  const customers = await customersModel.find({}).sort({ createdAt: -1 });
+  const userId = req.user._id;
+  const customers = await customersModel
+    .find({ userId })
+    .sort({ createdAt: -1 });
   res.status(200).json(customers);
 };
 
@@ -26,10 +29,10 @@ const addNewCustomer = async (req, res) => {
   const { name, email, phone, address, lastPurchaseAt, notes, isActive } =
     req.body;
 
-  console.log(name, email, phone, address, lastPurchaseAt, notes, isActive);
-
+  const userId = req.user._id;
   try {
     const customer = await customersModel.create({
+      userId,
       name,
       email,
       phone,

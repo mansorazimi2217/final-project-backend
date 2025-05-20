@@ -1,7 +1,10 @@
 import { Router } from "express";
 import customersController from "../controllers/customersController.js";
+import requireAuth from "../middleware/requireAuth.js";
+
 const router = Router();
 
+router.use(requireAuth);
 router.get("/", customersController.getAllCustomers);
 router.get("/:id", customersController.getOneCustomer);
 router.post("/", customersController.addNewCustomer);

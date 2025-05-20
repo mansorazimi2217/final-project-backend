@@ -24,6 +24,7 @@ const login = async (email, password) => {
 
 const login_post = async (req, res) => {
   const { email, passwrod } = req.body;
+  console.log(email, passwrod);
   try {
     const user = await login(email, passwrod);
     const token = createToken(user._id);
@@ -97,12 +98,15 @@ const signup_post = async (req, res) => {
       profileImage: profileImagePath,
     });
 
-    const token = createToken(user._di);
+    const token = createToken(user._id);
     res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
     console.log(token);
-    res
-      .status(201)
-      .json({ email: user.email, token, profileImage: profileImagePath });
+    res.status(201).json({
+      email: user.email,
+      token,
+      profileImage: profileImagePath,
+      businessName: user.business,
+    });
   } catch (err) {
     res.status(400).json({ error: err.message });
   }

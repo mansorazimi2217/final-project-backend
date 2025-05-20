@@ -2,7 +2,8 @@ import productModel from "../models/productsModel.js";
 import mongoose from "mongoose";
 
 const getAllProducts = async (req, res) => {
-  const products = await productModel.find({}).sort({ createdAt: -1 });
+  const userId = req.user._id;
+  const products = await productModel.find({ userId }).sort({ createdAt: -1 });
   res.status(200).json(products);
 };
 
@@ -78,7 +79,9 @@ const addNewProduct = async (req, res) => {
   }
 
   try {
+    const userId = req.user._id;
     const product = await productModel.create({
+      userId,
       name,
       brand,
       category,

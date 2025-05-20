@@ -3,7 +3,8 @@ import mongoose from "mongoose";
 
 const getAllData = async (req, res) => {
   try {
-    const data = await billModel.find({}).sort({ createdAt: -1 });
+    const userId = req.user._id;
+    const data = await billModel.find({ userId }).sort({ createdAt: -1 });
     res.json(data);
   } catch (error) {
     res.json(error);
@@ -29,7 +30,9 @@ const postNewData = async (req, res) => {
   try {
     const { total, totalPaied, customerName, date, products } = req.body;
 
+    const userId = req.user._id;
     const data = await billModel.create({
+      userId,
       total,
       totalPaied,
       customerName,

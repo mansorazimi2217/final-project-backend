@@ -1,7 +1,11 @@
 import { Router } from "express";
 import productsController from "../controllers/productsController.js";
 import { upload } from "../middleware/upload.js";
+import requireAuth from "../middleware/requireAuth.js";
+
 const router = Router();
+
+router.use(requireAuth);
 
 router.get("/", productsController.getAllProducts);
 
