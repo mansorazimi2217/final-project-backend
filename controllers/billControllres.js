@@ -28,11 +28,13 @@ const getSingleData = async (req, res) => {
 
 const postNewData = async (req, res) => {
   try {
-    const { total, totalPaied, customerName, date, products } = req.body;
+    const { customerId, total, totalPaied, customerName, date, products } =
+      req.body;
 
     const userId = req.user._id;
     const data = await billModel.create({
       userId,
+      customerId,
       total,
       totalPaied,
       customerName,

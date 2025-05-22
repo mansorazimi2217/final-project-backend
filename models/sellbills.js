@@ -7,6 +7,9 @@ const SellSchema = mongoose.Schema(
       ref: "USER",
       required: true,
     },
+    customerId: {
+      type: String,
+    },
     total: {
       type: Number,
       required: true,
@@ -23,6 +26,7 @@ const SellSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+
     date: {
       type: String,
     },
