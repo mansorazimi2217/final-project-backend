@@ -9,6 +9,7 @@ import authRoutes from "./routes/authRoutes.js";
 import productsRouth from "./routes/productsRouth.js";
 import customersRoute from "./routes/customersRoutes.js";
 import billRoutes from "./routes/billRoutes.js";
+import returnDueRoutes from "./routes/returnDueRoutes.js";
 
 const app = express();
 dotenv.config();
@@ -41,7 +42,9 @@ app.listen(port, () => {
 });
 
 app.use("/uploads", express.static("uploads"));
+
 app.use(authRoutes);
 app.use("/api/products", productsRouth);
 app.use("/api/customers", customersRoute);
 app.use("/api/bills", billRoutes);
+app.use("/api/duecustomers", returnDueRoutes);

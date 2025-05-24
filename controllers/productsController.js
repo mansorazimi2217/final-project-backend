@@ -173,6 +173,14 @@ const updateProduct = async (req, res) => {
   }
 };
 
+export default {
+  addNewProduct,
+  getAllProducts,
+  getSingleProduct,
+  deleteProduct,
+  updateProduct,
+};
+
 // const updateProduct = async (req, res) => {
 //   const { id } = req.params;
 
@@ -210,11 +218,3 @@ const updateProduct = async (req, res) => {
 //     res.status(500).json({ error: error.message });
 //   }
 // };
-
-export default {
-  addNewProduct,
-  getAllProducts,
-  getSingleProduct,
-  deleteProduct,
-  updateProduct,
-};
