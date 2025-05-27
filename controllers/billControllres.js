@@ -30,7 +30,7 @@ const postNewData = async (req, res) => {
   try {
     const { customerId, total, totalPaied, customerName, date, products } =
       req.body;
-
+    console.log(products);
     const userId = req.user._id;
     const data = await billModel.create({
       userId,

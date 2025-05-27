@@ -56,6 +56,10 @@ const productSchema = mongoose.Schema(
     img: {
       type: String,
     },
+    totalSold: {
+      type: Number,
+      default: 0,
+    },
   },
   { timestamps: true }
 );
