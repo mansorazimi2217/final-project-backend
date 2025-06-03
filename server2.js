@@ -10,6 +10,7 @@ import productsRouth from "./routes/productsRouth.js";
 import customersRoute from "./routes/customersRoutes.js";
 import billRoutes from "./routes/billRoutes.js";
 import returnDueRoutes from "./routes/returnDueRoutes.js";
+import ExpensesRoutes from "./routes/ExpensesRoutes.js";
 
 const app = express();
 dotenv.config();
@@ -48,3 +49,4 @@ app.use("/api/products", productsRouth);
 app.use("/api/customers", customersRoute);
 app.use("/api/bills", billRoutes);
 app.use("/api/duecustomers", returnDueRoutes);
+app.use("/api/expenses", ExpensesRoutes);

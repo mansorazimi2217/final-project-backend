@@ -1,6 +1,11 @@
 import mongoose, { mongo } from "mongoose";
 
 const ExpensesSchema = mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "USER",
+    required: true,
+  },
   date: {
     type: String,
     required: true,
@@ -13,7 +18,7 @@ const ExpensesSchema = mongoose.Schema({
     type: Number,
     required: true,
   },
-  maymentMethod: {
+  paymentMethod: {
     type: String,
     default: "Cash",
   },
