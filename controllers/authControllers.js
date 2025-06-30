@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import validator from "validator";
 
-const maxAge = 3 * 24 * 60 * 60;
+const maxAge = 2 * 24 * 60 * 60;
 
 const createToken = (id) => {
   return jwt.sign({ id }, process.env.SECRET, { expiresIn: maxAge });
