@@ -15,7 +15,6 @@ const productSchema = mongoose.Schema(
 
     brand: {
       type: String,
-      required: true,
     },
 
     category: {
@@ -25,7 +24,6 @@ const productSchema = mongoose.Schema(
 
     desc: {
       type: String,
-      required: true,
     },
     quantity: {
       type: Number,
@@ -46,12 +44,10 @@ const productSchema = mongoose.Schema(
     },
     expire_date: {
       type: String,
-      required: true,
     },
 
     come_date: {
       type: String,
-      required: true,
     },
     img: {
       type: String,

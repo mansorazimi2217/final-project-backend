@@ -43,15 +43,11 @@ const addNewProduct = async (req, res) => {
   if (!name) {
     emptFeilds.push("name");
   }
-  if (!brand) {
-    emptFeilds.push("brand");
-  }
+
   if (!category) {
     emptFeilds.push("category");
   }
-  if (!desc) {
-    emptFeilds.push("desc");
-  }
+
   if (!quantity) {
     emptFeilds.push("quantity");
   }
@@ -65,17 +61,11 @@ const addNewProduct = async (req, res) => {
   if (!currency) {
     emptFeilds.push("currency");
   }
-  if (!expire_date) {
-    emptFeilds.push("expire_date");
-  }
-  if (!come_date) {
-    emptFeilds.push("come_date");
-  }
 
   if (emptFeilds.length > 0) {
     return res
       .status(400)
-      .json({ error: "Please fill in all feilds", emptFeilds });
+      .json({ error: "Please fill in all required feilds", emptFeilds });
   }
 
   try {

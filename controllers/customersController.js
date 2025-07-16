@@ -28,9 +28,39 @@ const getOneCustomer = async (req, res) => {
 const addNewCustomer = async (req, res) => {
   const { name, email, phone, address, lastPurchaseAt, notes, isActive } =
     req.body;
-
   const userId = req.user._id;
+
   try {
+    // Check for existing email
+    const existingEmail = await customersModel.findOne({
+      userId,
+      email,
+    });
+
+    // Check for existing phone
+    const existingPhone = await customersModel.findOne({
+      userId,
+      phone,
+    });
+
+    if (existingEmail && existingPhone) {
+      return res.status(400).json({
+        error: "Both email and phone number are already in use",
+        field: "both",
+      });
+    } else if (existingEmail) {
+      return res.status(400).json({
+        error: "This email is already in use",
+        field: "email",
+      });
+    } else if (existingPhone) {
+      return res.status(400).json({
+        error: "This phone number is already in use",
+        field: "phone",
+      });
+    }
+
+    // Create the new customer
     const customer = await customersModel.create({
       userId,
       name,
@@ -42,11 +72,12 @@ const addNewCustomer = async (req, res) => {
       isActive,
     });
 
-    if (customer) {
-      res.status(200).json(customer);
-    }
+    res.status(200).json(customer);
   } catch (err) {
-    res.status(404).json(err);
+    res.status(500).json({
+      error: "Server error while adding customer.",
+      details: err.message,
+    });
   }
 };
 
@@ -63,7 +94,6 @@ const updateCustomer = async (req, res) => {
     let options = { new: true };
 
     switch (actionType) {
-      // Case 1: When selling products (from selling page)
       case "sale":
         if (
           typeof totalSpent === "undefined" ||
@@ -100,7 +130,6 @@ const updateCustomer = async (req, res) => {
         };
         break;
 
-      // Case 3: Manual update (from customer edit form)
       default:
         updateData = { ...req.body };
         break;
@@ -121,43 +150,6 @@ const updateCustomer = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-
-// const updateCustomer = async (req, res) => {
-//   const { id } = req.params;
-
-//   if (!mongoose.Types.ObjectId.isValid(id)) {
-//     return res.status(404).json({ error: "Invalid customer ID" });
-//   }
-
-//   try {
-//     let customer;
-
-//     if (req.body.totalSpent !== undefined) {
-//       console.log(req.body.remainVale);
-//       await customersModel.findByIdAndUpdate(req.params.id, {
-//         $inc: {
-//           totalSpent: Number(req.body.totalSpent),
-//           totalOrders: 1,
-//           remainValue: Number(req.body.remainVale),
-//         },
-//       });
-//     } else {
-//       customer = await customersModel.findByIdAndUpdate(
-//         id,
-//         { ...req.body },
-//         { new: true }
-//       );
-//     }
-
-//     if (!customer) {
-//       return res.status(404).json({ error: "Customer not found" });
-//     }
-
-//     res.status(200).json(customer);
-//   } catch (error) {
-//     res.status(500).json({ error: error.message });
-//   }
-// };
 
 const deleteCustomer = async (req, res) => {
   const { id } = req.params;
@@ -189,30 +181,3 @@ export default {
   updateCustomer,
   deleteCustomer,
 };
-
-// const updateCustomer = async (req, res) => {
-//   const { id } = req.params;
-
-//   if (!mongoose.Types.ObjectId.isValid(id)) {
-//     return res.status(404).json({ error: "Invalid customer ID" });
-//   }
-
-//   try {
-
-//     const customer = await customersModel.findByIdAndUpdate(
-//       id,
-//       { ...req.body },
-//       {
-//         new: true,
-//       }
-//     );
-
-//     if (!customer) {
-//       res.status(404).json("customer not found");
-//     }
-
-//     res.status(200).json(customer);
-//   } catch (error) {
-//     res.status(500).json({ error: error.message });
-//   }
-// };
